@@ -1,65 +1,60 @@
-import Head from 'next/head'
+import {Suspense, useRef, useState} from 'react'
+import {Canvas} from "react-three-fiber";
+import Card from "../components/card";
 import styles from '../styles/Home.module.css'
+import Chip from "../components/chip";
+import Text from "../components/text";
 
 export default function Home() {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+    const [ccNumber, setCCNumber] = useState('1234567890123456')
+    const [name, setName] = useState('John Doe')
+    const [exp, setExp] = useState('12/34')
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+    function changeCC(event) {
+        event.preventDefault()
+        setCCNumber(event.target.value)
+        const regex = /(\d{4})/g;
+        const str = ccNumber;
+        const subst = `$1 `;
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+        const result = str.replace(regex, subst);
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+        console.log('Substitution result: ', result);
 
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
+    }
 
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+    function changeName(event){
+        event.preventDefault()
+        setName(event.target.value)
+    }
+
+    function changeExp(event){
+        event.preventDefault()
+        setExp(event.target.value)
+    }
+
+    const ref = useRef()
+    return (
+        <div className={styles.container}>
+            <Canvas>
+                <ambientLight intensity={2}/>
+                <pointLight position={[0, 0, 30]}/>
+                <Suspense fallback={null}>
+                    <group ref={ref}>
+                        <Card position={[0, 0, 0]}/>
+                        <Chip position={[-2.5, .5, 0]}/>
+                        <Text size={2} hAlign='center' position={[-3.5, -1.5, 0]} children={ccNumber} />
+                        <Text hAlign='center' position={[-4,-2.1,0]} children={name} />
+                        <Text hAlign='center' position={[-1, -2.1 ,0]} children={exp} />
+                    </group>
+                </Suspense>
+            </Canvas>
+            <form className={styles.form}>
+                <input onChange={changeCC} placeholder={ccNumber} />
+                <input onChange={changeName} placeholder={name} />
+                <input onChange={changeExp} placeholder={exp} />
+            </form>
         </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+    )
 }
