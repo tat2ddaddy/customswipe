@@ -13,15 +13,12 @@ export default function Home() {
 
     function changeCC(event) {
         event.preventDefault()
-        setCCNumber(event.target.value)
         const regex = /(\d{4})/g;
-        const str = ccNumber;
+        const str = event.target.value;
         const subst = `$1 `;
-
         const result = str.replace(regex, subst);
-
-        console.log('Substitution result: ', result);
-
+        console.log(result)
+        setCCNumber(result)
     }
 
     function changeName(event){
@@ -31,7 +28,12 @@ export default function Home() {
 
     function changeExp(event){
         event.preventDefault()
-        setExp(event.target.value)
+        const regex = /(\d{2})(\d{2})/g
+        const str = event.target.value
+        const subst = '$1' + '/' + '$2'
+        const result = str.replace(regex, subst)
+        console.log(result)
+        setExp(result)
     }
 
     const ref = useRef()
@@ -45,15 +47,15 @@ export default function Home() {
                         <Card position={[0, 0, 0]}/>
                         <Chip position={[-2.5, .5, 0]}/>
                         <Text size={2} hAlign='center' position={[-3.5, -1.5, 0]} children={ccNumber} />
-                        <Text hAlign='center' position={[-4,-2.1,0]} children={name} />
+                        <Text hAlign='center' position={[-3.4,-2.1,0]} children={name} />
                         <Text hAlign='center' position={[-1, -2.1 ,0]} children={exp} />
                     </group>
                 </Suspense>
             </Canvas>
             <form className={styles.form}>
-                <input onChange={changeCC} placeholder={ccNumber} />
+                <input onChange={changeCC} placeholder={ccNumber} maxLength='16' />
                 <input onChange={changeName} placeholder={name} />
-                <input onChange={changeExp} placeholder={exp} />
+                <input onChange={changeExp} placeholder={exp} maxLength='4' />
             </form>
         </div>
     )
