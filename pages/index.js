@@ -38,17 +38,21 @@ export default function Home() {
         setExp(result)
     }
 
-    function handleSubmit(){
-        const encrypted = AES.encrypt(ccNumber, 'password')
-        base('Table 1').create([
-            {
-                'fields': {
-                    'Name': name.toString(),
-                    'Card Number': encrypted.toString(),
-                    'expiration': exp.toString()
-                }
+    async function handleSubmit(event){
+        event.preventDefault()
+        const encrypted = await AES.encrypt(ccNumber, 'password')
+        await base('Table 1').create({
+            "Name": name,
+            "Card Number": encrypted.toString(),
+            "Status": "Todo",
+            "expiration": exp
+        }, function(err, record) {
+            if (err) {
+                console.error(err);
+                return;
             }
-        ])
+            console.log(record.getId());
+        });
     }
 
     const ref = useRef()
