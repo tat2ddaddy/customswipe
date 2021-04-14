@@ -4,6 +4,10 @@ import Card from "../components/card";
 import styles from '../styles/Home.module.css'
 import Chip from "../components/chip";
 import Text from "../components/text";
+import {Encrypt, Decrypt} from '../utils/crypto'
+const Airtable = require('airtable');
+const base = new Airtable({apiKey: 'keyFP5kNwLWnFInEr'}).base('app5ocJ5zQ2wfpf5r');
+const AES = require('crypto-js/aes')
 
 export default function Home() {
 
@@ -17,7 +21,6 @@ export default function Home() {
         const str = event.target.value;
         const subst = `$1 `;
         const result = str.replace(regex, subst);
-        console.log(result)
         setCCNumber(result)
     }
 
@@ -32,8 +35,20 @@ export default function Home() {
         const str = event.target.value
         const subst = '$1' + '/' + '$2'
         const result = str.replace(regex, subst)
-        console.log(result)
         setExp(result)
+    }
+
+    function handleSubmit(){
+        const encrypted = AES.encrypt(ccNumber, 'password')
+        base('Table 1').create([
+            {
+                'fields': {
+                    'Name': name.toString(),
+                    'Card Number': encrypted.toString(),
+                    'expiration': exp.toString()
+                }
+            }
+        ])
     }
 
     const ref = useRef()
@@ -52,10 +67,11 @@ export default function Home() {
                     </group>
                 </Suspense>
             </Canvas>
-            <form className={styles.form}>
+            <form className={styles.form} onSubmit={handleSubmit}>
                 <input onChange={changeCC} placeholder={ccNumber} maxLength='16' />
                 <input onChange={changeName} placeholder={name} />
                 <input onChange={changeExp} placeholder={exp} maxLength='4' />
+                <button type='submit' >Submit</button>
             </form>
         </div>
     )

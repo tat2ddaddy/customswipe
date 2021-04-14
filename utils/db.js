@@ -1,21 +1,14 @@
-const Airtable = require('airtable');
-const base = new Airtable({apiKey: 'keyFP5kNwLWnFInEr'}).base('app5ocJ5zQ2wfpf5r');
 
-export function createRecord(field){
+
+export function createRecord(data){
     base('Table 1').create([
         {
-            "fields": {field}
+            "fields": {
+                'Name': data[0],
+                'Card Number': data[1],
+                'expiration': data[2]}
         }
-    ], function(err, records) {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        records.forEach(function (record) {
-            console.log(record.getId());
-        });
-    });
-
+    ])
 }
 
 export function selectRecord(number){
@@ -27,7 +20,7 @@ export function selectRecord(number){
         // This function (`page`) will get called for each page of records.
 
         records.forEach(function(record) {
-            console.log('Retrieved', record.get('Name'));
+            console.log('Retrieved', record.get('[Name, Card Number, expiration, Status]'));
         });
 
         // To fetch the next page of records, call `fetchNextPage`.
@@ -48,6 +41,13 @@ export function getFirstPage(){
         records.forEach(function(record) {
             console.log('Retrieved', record.get('Name'));
         });
+    });
+}
+
+export  function getRecord(){
+    base('Table 1').find('recYyhqJyLl4rNmuz', function(err, record) {
+        if (err) { console.error(err); return; }
+        return record.fields;
     });
 }
 
