@@ -3,7 +3,7 @@ import {useRef} from "react";
 
 export default function Card(props) {
     const mesh = useRef()
-    useFrame(() => mesh.current.rotation.x = mesh.current.rotation.y += 0)
+    useFrame(() => mesh.current.rotation.x += 0)
 
     return (
         <mesh
