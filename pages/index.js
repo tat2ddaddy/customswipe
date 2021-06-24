@@ -53,6 +53,9 @@ export default function Home() {
             }
             console.log(record.getId());
         });
+        await setName('')
+        await setCCNumber('')
+        await setExp('')
     }
 
     const ref = useRef()
