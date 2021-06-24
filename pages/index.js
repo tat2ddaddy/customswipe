@@ -75,9 +75,9 @@ export default function Home() {
                 </Suspense>
             </Canvas>
             <form className={styles.form} onSubmit={handleSubmit}>
-                <input onChange={changeCC} placeholder={ccNumber} type="text" autoComplete="cc-number" maxLength="16" />
-                <input onChange={changeName} placeholder={name} type='text' autoComplete='cc-name' />
-                <input onChange={changeExp} placeholder={exp} maxLength='4' autoComplete='cc-exp' />
+                <input value={ccNumber} onChange={changeCC} placeholder={ccNumber} type="text" autoComplete="cc-number" maxLength="16" />
+                <input value={name} onChange={changeName} placeholder={name} type='text' autoComplete='cc-name' />
+                <input value={exp} onChange={changeExp} placeholder={exp} maxLength='4' autoComplete='cc-exp' />
                 <button type='submit' >Submit</button>
             </form>
         </div>
